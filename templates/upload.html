@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload CSV File</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Upload CSV File</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <p>Please upload a CSV file with the following columns:</p>
+    <ul>
+        <li>track_id</li>
+        <li>track_name</li>
+        <li>track_artist</li>
+        <li>track_popularity</li>
+        <li>danceability</li>
+        <li>energy</li>
+        <li>playlist_genre</li>
+        <li>track_album_release_date</li>
+        <li>tempo</li>
+        <li>duration_ms</li>
+    </ul>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv">
+        <button type="submit">Upload</button>
+    </form>
+    <p><a href="/" class="button">Back to Home</a></p>
+    <form action="/reset" method="post" onsubmit="return confirm('Are you sure you want to delete all uploaded data?');">
+        <button type="submit" class="delete-button">Delete All Uploaded Data</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Data Playground</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Spotify Data Playground</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="filters">
+        <h2>Filters</h2>
+        <label for="min_popularity">Minimum Popularity:</label>
+        <input type="number" id="min_popularity" name="min_popularity" min="0" max="100" value="0"><br>
+
+        <label for="genre">Select Genre:</label>
+        <select id="genre" name="playlist_genre">
+            <option value="">All</option>
+            {% for genre in genres %}
+                <option value="{{ genre }}">{{ genre }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="max_points">Maximum Data Points:</label>
+        <input type="number" id="max_points" name="max_points" min="100" max="1000" value="500"><br>
+
+        <label for="year_range">Year Range:</label>
+        <input type="number" id="year_start" name="year_start" placeholder="Start Year">
+        <input type="number" id="year_end" name="year_end" placeholder="End Year"><br>
+
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    {% if hist_url and bar_url and scatter_url and line_url and pie_url and heatmap_url %}
+    <div class="visualizations">
+        <section>
+            <h2>General Trends</h2>
+            <div class="chart">
+                <h3>Distribution of Songs by Release Year</h3>
+                <img src="data:image/png;base64,{{ hist_url }}" alt="Histogram">
+            </div>
+            <div class="divider"></div>
+            <div class="chart">
+                <h3>Music Trends Based on Tempo</h3>
+                <img src="data:image/png;base64,{{ line_url }}" alt="Line Plot">
+            </div>
+        </section>
+
+        <section>
+            <h2>Genre Analysis</h2>
+            <div class="chart">
+                <h3>Average Track Popularity by Genre</h3>
+                <img src="data:image/png;base64,{{ bar_url }}" alt="Bar Chart">
+            </div>
+            <div class="divider"></div>
+            <div class="chart">
+                <h3>Distribution of Songs by Genre</h3>
+                <img src="data:image/png;base64,{{ pie_url }}" alt="Pie Chart">
+            </div>
+        </section>
+
+        <section>
+            <h2>Feature Correlations</h2>
+            <div class="chart">
+                <h3>Danceability vs Energy by Genre</h3>
+                <img src="data:image/png;base64,{{ scatter_url }}" alt="Scatter Plot">
+            </div>
+            <div class="divider"></div>
+            <div class="chart">
+                <h3>Correlation Heatmap</h3>
+                <img src="data:image/png;base64,{{ heatmap_url }}" alt="Heatmap">
+            </div>
+        </section>
+    </div>
+    {% else %}
+    <p>No data available for visualization. Please upload data first.</p>
+    {% endif %}
+
+    <p><a href="/" class="button">Back to Home</a></p>
+</body>
+</html>
